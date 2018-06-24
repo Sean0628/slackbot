@@ -33,7 +33,7 @@ class LunchBot
     こんにちは。
     来週 *#{format_date(next_tuesday)} 火曜日* 、
     #{members}
-    一緒にランチに行ってっしゃい :tada: :tada: :tada:
+    一緒にランチに行ってらっしゃい :tada: :tada: :tada:
     EOS
   end
 end
