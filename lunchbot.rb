@@ -6,6 +6,7 @@ require './helper.rb'
 class LunchBot
   include Helper
   Dotenv.load
+
   TARGET_CHANNEL = ENV['TARGET_CHANNEL']
   BOT_ID = ENV['BOT_ID']
   BOT_TOKEN = ENV['BOT_TOKEN']
@@ -33,7 +34,7 @@ class LunchBot
     こんにちは。
     来週 *#{format_date(next_tuesday)} 火曜日* 、
     #{members}
-    一緒にランチに行ってらっしゃい :tada: :tada: :tada:
+    一緒にランチに行ってらっしゃい :meat_on_bone: :green_salad: :cake:
     EOS
   end
 end
