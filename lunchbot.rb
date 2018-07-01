@@ -24,11 +24,11 @@ class LunchBot
     message_within1week =
       extract_messages_within1week(get_channel_history(client))
     unavailable_user = extract_unavailable_user(message_within1week) << BOT_ID
-    pick_members(client, unavailable_user)
-    post_message(client)
+    members = pick_members(client, unavailable_user)
+    post_message(client, members)
   end
 
- private
+  private
   def generate_text(members)
     next_tuesday = Date.today + 7
     <<~"EOS"
@@ -39,9 +39,9 @@ class LunchBot
     EOS
   end
 
-  def post_message(client)
+  def post_message(client, members)
     client.chat_postMessage(channel: TARGET_CHANNEL,
-                            text: generate_text(pick_members(client)),
+                            text: generate_text(members),
                             as_user: false,
                             username: USER_NAME)
   end
