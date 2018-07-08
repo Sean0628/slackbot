@@ -3,6 +3,7 @@ require 'slack'
 require 'date'
 require 'time'
 require './helper.rb'
+require 'yaml'
 
 class LunchBot
   include Helper
@@ -40,7 +41,7 @@ class LunchBot
   end
 
   def post_message(client, members)
-    client.chat_postMessage(channel: TARGET_CHANNEL,
+    client.chat_postmessage(channel: TARGET_CHANNEL,
                             text: generate_text(members),
                             as_user: false,
                             username: USER_NAME)
@@ -80,3 +81,13 @@ end
 
 bot = LunchBot.new
 bot.run
+
+client = Slack::Client.new
+rtm = client.realtime
+rtm.on :message do |m|
+  client.chat_postmessage(channel: TARGET_CHANNEL,
+                          text: 'test',
+                          as_user: false,
+                          username: USER_NAME)
+end
+rtm.start
