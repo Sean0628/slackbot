@@ -85,6 +85,7 @@ bot.run
 client = Slack::Client.new
 rtm = client.realtime
 rtm.on :message do |m|
+  client = Slack::Client.newv
   client.chat_postmessage(channel: TARGET_CHANNEL,
                           text: 'test',
                           as_user: false,
