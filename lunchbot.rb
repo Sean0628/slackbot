@@ -81,14 +81,3 @@ end
 
 bot = LunchBot.new
 bot.run
-
-client = Slack::Client.new
-rtm = client.realtime
-rtm.on :message do |m|
-  client = Slack::Client.newv
-  client.chat_postmessage(channel: TARGET_CHANNEL,
-                          text: 'test',
-                          as_user: false,
-                          username: USER_NAME)
-end
-rtm.start
