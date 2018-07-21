@@ -14,14 +14,8 @@ class LunchBot
   OAUTH_TOKEN = ENV['OAUTH_TOKEN']
   USER_NAME = '勝手にランチBot'.freeze
 
-  def initialize
-    Slack.configure do |config|
-      config.token = OAUTH_TOKEN
-    end
-  end
-
   def run
-    client = Slack::Client.new
+    client = Slack::Client.new(token: OAUTH_TOKEN)
     message_within1week =
       extract_messages_within1week(get_channel_history(client))
     unavailable_user = extract_unavailable_user(message_within1week) << BOT_ID
