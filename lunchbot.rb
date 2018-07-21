@@ -41,7 +41,7 @@ class LunchBot
   end
 
   def post_message(client, members)
-    client.chat_postmessage(channel: TARGET_CHANNEL,
+    client.chat_postMessage(channel: TARGET_CHANNEL,
                             text: generate_text(members),
                             as_user: false,
                             username: USER_NAME)
