@@ -24,6 +24,7 @@ class LunchBot
   end
 
   private
+
   def generate_text(members)
     next_tuesday = Date.today + 7
     <<~"EOS"
