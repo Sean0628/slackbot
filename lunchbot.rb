@@ -56,7 +56,7 @@ class LunchBot
   end
 
   def extract_unavailable_user(messages)
-    denials = %w[パス pass ぱす]
+    denials = %w[パス ぱす pass Pass PASS]
     unavailable_user = []
     messages.each do |message|
       unavailable_user << message['user'] if denials.include?(message['text'])

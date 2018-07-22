@@ -32,7 +32,7 @@ class RtmReply
   end
 
   def pass?(message)
-    %(パス pass ぱす).include?(message['text'])
+    %(パス ぱす pass Pass PASS).include?(message['text'])
   end
 end
 
