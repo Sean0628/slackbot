@@ -32,6 +32,7 @@ class RtmReply
   end
 
   def pass?(message)
+    return false if message['text'].nil?
     %(パス ぱす pass Pass PASS).include?(message['text'])
   end
 end
