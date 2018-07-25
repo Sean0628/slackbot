@@ -45,6 +45,7 @@ class LunchBot
   def get_channel_history(client)
     a_week_ago = Date.today - 7
     client.channels_history(channel: TARGET_CHANNEL,
+                            count: 300,
                             oldest: to_unix_ts(a_week_ago))['messages']
   end
 
