@@ -19,25 +19,34 @@ class LunchBot
     message_within1week =
       extract_messages_within1week(get_channel_history(client))
     unavailable_user = extract_unavailable_user(message_within1week) << BOT_ID
-    members = pick_members(client, unavailable_user)
-    post_message(client, members)
+    groups = decide_groups(client, unavailable_user)
+    puts generate_text(groups)
+    post_message(client, groups)
   end
 
   private
 
-  def generate_text(members)
-    next_tuesday = Date.today + 7
+  def generate_text(groups)
+    tmr = Date.today + 1
     <<~"EOS"
     こんにちは。
-    来週 *#{format_date(next_tuesday)} 火曜日* 、
-    #{members}
+    明日 *#{format_date(tmr)} 金曜日* 、
+    #{format_groups(groups)}
     一緒にランチに行ってらっしゃい :meat_on_bone: :green_salad: :cake:
     EOS
   end
 
-  def post_message(client, members)
-    client.chat_postMessage(channel: TARGET_CHANNEL,
-                            text: generate_text(members),
+  def format_groups(groups)
+    txt = "\n"
+    groups.each.with_index(1) do |g, i|
+      txt << "TEAM#{i}: #{g}\n"
+    end
+    txt
+  end
+
+  def post_message(client, groups)
+    client.chat_postMessage(channel: 'DAT80QBH8',#TARGET_CHANNEL,
+                            text: generate_text(groups),
                             as_user: false,
                             username: USER_NAME)
   end
@@ -66,12 +75,18 @@ class LunchBot
     unavailable_user
   end
 
-  def pick_members(client, user)
+  def decide_groups(client, user)
     channel_members =
       client.channels_info(channel: TARGET_CHANNEL)['channel']['members']
             .reject { |id| user.include?(id) }
             .map { |id| "<@#{id}>さん" }
-    channel_members.sample(4).join(' ')
+            .shuffle
+    group_members = []
+    group_members << channel_members.shift(4) while channel_members.count >= 4
+    group_members.map do |m|
+      m << channel_members.shift if channel_members.count > 0
+    end
+    group_members.map { |m| m.join(' ') }
   end
 end
 
