@@ -81,6 +81,10 @@ class LunchBot
             .map { |id| "<@#{id}>さん" }
             .shuffle
     group_members = []
+    if channel_members.count < 4
+      group_members << channel_members.shift(channel_members.count)
+      return group_members.map { |m| m.join(' ') }
+    end
     group_members << channel_members.shift(4) while channel_members.count >= 4
     group_members.map do |m|
       m << channel_members.shift if channel_members.count > 0
