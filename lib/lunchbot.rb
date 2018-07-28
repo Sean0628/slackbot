@@ -2,7 +2,7 @@ require 'dotenv'
 require 'slack'
 require 'date'
 require 'time'
-require './helper.rb'
+require './lib/helper.rb'
 require 'yaml'
 
 class LunchBot
@@ -20,7 +20,6 @@ class LunchBot
       extract_messages_within1week(get_channel_history(client))
     unavailable_user = extract_unavailable_user(message_within1week) << BOT_ID
     groups = decide_groups(client, unavailable_user)
-    puts generate_text(groups)
     post_message(client, groups)
   end
 
@@ -45,7 +44,7 @@ class LunchBot
   end
 
   def post_message(client, groups)
-    client.chat_postMessage(channel: 'DAT80QBH8',#TARGET_CHANNEL,
+    client.chat_postMessage(channel: TARGET_CHANNEL,
                             text: generate_text(groups),
                             as_user: false,
                             username: USER_NAME)
