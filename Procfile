@@ -1,1 +1,1 @@
-web: ruby ./lib/rtm_reply
+web: ruby ./lib/rtm_reply.rb
