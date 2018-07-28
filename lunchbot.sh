@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly THURSDAY=4
+readonly THURSDAY=6
 
 if [ $(date +%u) != $THURSDAY ]; then
   exit 1
