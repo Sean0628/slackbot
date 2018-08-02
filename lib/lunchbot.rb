@@ -18,8 +18,9 @@ class LunchBot
     client = Slack::Client.new(token: OAUTH_TOKEN)
     message_within1week =
       extract_messages_within1week(get_channel_history(client))
-    unavailable_user = extract_unavailable_user(message_within1week) << BOT_ID
-    groups = decide_groups(client, unavailable_user)
+    unavailable_users = extract_unavailable_users(message_within1week) << BOT_ID
+    groups = decide_groups(client, unavailable_users)
+    generate_text(groups)
     post_message(client, groups)
   end
 
@@ -28,7 +29,7 @@ class LunchBot
   def generate_text(groups)
     tmr = Date.today + 1
     <<~"EOS"
-    こんにちは。
+    こんにちは〜。
     明日 *#{format_date(tmr)} 金曜日* 、
     #{format_groups(groups)}
     一緒にランチに行ってらっしゃい :meat_on_bone: :green_salad: :cake:
@@ -65,19 +66,19 @@ class LunchBot
     messages_within1week
   end
 
-  def extract_unavailable_user(messages)
+  def extract_unavailable_users(messages)
     denials = %w[パス ぱす pass Pass PASS]
-    unavailable_user = []
+    unavailable_users = []
     messages.each do |message|
-      unavailable_user << message['user'] if denials.include?(message['text'])
+      unavailable_users << message['user'] if denials.include?(message['text'])
     end
-    unavailable_user
+    unavailable_users
   end
 
-  def decide_groups(client, user)
+  def decide_groups(client, users)
     channel_members =
       client.channels_info(channel: TARGET_CHANNEL)['channel']['members']
-            .reject { |id| user.include?(id) }
+            .reject { |id| users.include?(id) }
             .map { |id| "<@#{id}>さん" }
             .shuffle
     group_members = []
@@ -86,8 +87,10 @@ class LunchBot
       return group_members.map { |m| m.join(' ') }
     end
     group_members << channel_members.shift(4) while channel_members.count >= 4
-    group_members.map do |m|
-      m << channel_members.shift if channel_members.count > 0
+    while channel_members.count > 0
+      group_members.map do |m|
+        m << channel_members.shift unless channel_members.empty?
+      end
     end
     group_members.map { |m| m.join(' ') }
   end
