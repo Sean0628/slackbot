@@ -20,7 +20,6 @@ class LunchBot
       extract_messages_within1week(get_channel_history(client))
     unavailable_users = extract_unavailable_users(message_within1week) << BOT_ID
     groups = decide_groups(client, unavailable_users)
-    generate_text(groups)
     post_message(client, groups)
   end
 
@@ -52,7 +51,7 @@ class LunchBot
   end
 
   def get_channel_history(client)
-    a_week_ago = Date.today - 7
+    a_week_ago = DateTime.now - 7
     client.channels_history(channel: TARGET_CHANNEL,
                             count: 300,
                             oldest: to_unix_ts(a_week_ago))['messages']
